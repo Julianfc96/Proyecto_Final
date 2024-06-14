@@ -1,0 +1,91 @@
+version: 2
+
+models:
+
+  - name: stg_financiera__account
+    description: "Tabla de cuentas financieras."
+    columns:
+      - name: column_name
+        description: "Descripción de la columna."
+        data_type: data_type_here
+  
+  - name: stg_financiera__card
+    description: "Tabla de tarjetas financieras."
+    columns:
+      - name: column_name
+        description: "Descripción de la columna."
+        data_type: data_type_here
+
+  - name: stg_financiera__client_disp
+    description: "Tabla de disposición de clientes."
+    columns:
+      - name: column_name
+        description: "Descripción de la columna."
+        data_type: data_type_here
+
+  - name: stg_financiera__district
+    description: "Tabla de distritos financieros."
+    columns:
+      - name: column_name
+        description: "Descripción de la columna."
+        data_type: data_type_here
+
+  - name: stg_financiera__loan
+    description: "Tabla de préstamos financieros."
+    columns:
+      - name: column_name
+        description: "Descripción de la columna."
+        data_type: data_type_here
+
+
+  - name: stg_financiera__trans
+    description: "Esta tabla contiene las transacciones financieras de la fuente."
+    columns:
+      - name: trans_id
+        description: "El identificador único de la transacción."
+        data_type: integer
+        tests:
+          - not_null
+          - unique
+      - name: account_id
+        description: "El identificador de la cuenta relacionada con la transacción."
+        data_type: integer
+        tests:
+          - not_null
+      - name: created_at
+        description: "La fecha y hora en que se creó la transacción."
+        data_type: timestamp
+        tests:
+          - not_null
+      - name: trans_type
+        description: "El tipo de transacción (CRÉDITO, RETIRO, etc.)."
+        data_type: varchar
+      - name: operation
+        description: "El tipo de operación realizada en la transacción."
+        data_type: varchar
+      - name: amount
+        description: "El monto de la transacción."
+        data_type: decimal
+      - name: balance
+        description: "El saldo después de la transacción."
+        data_type: decimal
+      - name: trans_desc
+        description: "Una descripción detallada de la transacción."
+        data_type: varchar
+      - name: bank_id
+        description: "El identificador único del banco asociado."
+        data_type: varchar
+      - name: partner_bank
+        description: "El banco asociado con la transacción."
+        data_type: varchar
+      - name: partner_account
+        description: "La cuenta asociada del socio."
+        data_type: varchar
+      - name: data_deleted
+        description: "Indicador de si los datos han sido eliminados."
+        data_type: boolean
+      - name: date_load
+        description: "La fecha en que se cargaron los datos."
+        data_type: timestamp
+
+# Define más modelos aquí si es necesario

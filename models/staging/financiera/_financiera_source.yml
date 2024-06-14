@@ -1,0 +1,300 @@
+version: 2
+
+sources:
+  - name: financiera
+    description: ""
+    database: alumno26_dev_bronze_db
+    schema: SNOWFLAKE_DB_FINANCIERA
+    tables:
+      - name: account
+        description: ""
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: ""
+          - name: date
+            data_type: number
+            description: ""
+          - name: frequency
+            data_type: varchar
+            description: ""
+          - name: account_id
+            data_type: number
+            description: ""
+            tests: 
+              - unique
+              - not_null
+          - name: district_id
+            data_type: number
+            description: ""
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: ""
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: ""
+
+      - name: card
+        description: ""
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: ""
+          - name: card_id
+            data_type: number
+            description: ""
+            tests: 
+              - unique
+              - not_null
+          - name: type
+            data_type: varchar
+            description: ""
+          - name: issued
+            data_type: varchar
+            description: ""
+          - name: disp_id
+            data_type: number
+            description: ""
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: ""
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: ""
+
+      - name: client
+        description: ""
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: ""
+          - name: client_id
+            data_type: number
+            description: ""
+            tests: 
+              - unique
+              - not_null
+          - name: birth_date
+            data_type: date
+            description: ""
+          - name: gender
+            data_type: varchar
+            description: ""
+          - name: district_id
+            data_type: number
+            description: ""
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: ""
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: ""
+
+      - name: disp
+        description: ""
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: ""
+          - name: disp_id
+            data_type: number
+            description: ""
+            tests: 
+              - unique
+              - not_null
+          - name: type
+            data_type: varchar
+            description: ""
+          - name: client_id
+            data_type: number
+            description: ""
+          - name: account_id
+            data_type: number
+            description: ""
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: ""
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: ""
+
+      - name: district
+        description: ""
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: ""
+          - name: a5
+            data_type: number
+            description: ""
+          - name: a8
+            data_type: number
+            description: ""
+          - name: a6
+            data_type: number
+            description: ""
+          - name: a1
+            data_type: number
+            description: ""
+            tests: 
+              - unique
+              - not_null
+          - name: a4
+            data_type: number
+            description: ""
+          - name: a7
+            data_type: number
+            description: ""
+          - name: a2
+            data_type: varchar
+            description: ""
+          - name: a3
+            data_type: varchar
+            description: ""
+          - name: a11
+            data_type: float
+            description: ""
+          - name: a12
+            data_type: float
+            description: ""
+          - name: a14
+            data_type: number
+            description: ""
+          - name: a13
+            data_type: number
+            description: ""
+          - name: a9
+            data_type: float
+            description: ""
+          - name: a16
+            data_type: number
+            description: ""
+          - name: a10
+            data_type: number
+            description: ""
+          - name: a15
+            data_type: number
+            description: ""
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: ""
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: ""
+
+      - name: loan
+        description: ""
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: ""
+          - name: payments
+            data_type: float
+            description: ""
+          - name: account_id
+            data_type: number
+            description: ""
+          - name: amount
+            data_type: number
+            description: ""
+          - name: duration
+            data_type: number
+            description: ""
+          - name: date
+            data_type: number
+            description: ""
+          - name: loan_id
+            data_type: number
+            description: ""
+            tests: 
+              - unique
+              - not_null
+          - name: status
+            data_type: varchar
+            description: ""
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: ""
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: ""
+
+      - name: order_financiera
+        description: ""
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: ""
+          - name: order_id
+            data_type: number
+            description: ""
+            tests: 
+              - unique
+              - not_null
+          - name: account_to
+            data_type: varchar
+            description: ""
+          - name: account_id
+            data_type: number
+            description: ""
+          - name: amount
+            data_type: float
+            description: ""
+          - name: k_symbol
+            data_type: varchar
+            description: ""
+          - name: bank_to
+            data_type: varchar
+            description: ""
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: ""
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: ""
+
+      - name: trans
+        description: ""
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: ""
+          - name: account
+            data_type: varchar
+            description: ""
+          - name: balance
+            data_type: float
+            description: ""
+          - name: k_symbol
+            data_type: varchar
+            description: ""
+          - name: operation
+            data_type: varchar
+            description: ""
+          - name: bank
+            data_type: varchar
+            description: ""
+          - name: account_id
+            data_type: number
+            description: ""
+          - name: amount
+            data_type: float
+            description: ""
+          - name: date
+            data_type: number
+            description: ""
+          - name: trans_id
+            data_type: number
+            description: ""
+            tests: 
+              - unique
+              - not_null
+          - name: type
+            data_type: varchar
+            description: ""
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: ""
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: ""
