@@ -35,7 +35,7 @@ combined as (
         c.district_id,
         c.gender,
         d.account_user,
-        c.birth_date
+        c.birth_date,
     from renamed_disp d
     left join renamed_client c on d.client_id = c.client_id
 )

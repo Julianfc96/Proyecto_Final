@@ -2,7 +2,7 @@ with
 
 source as (
 
-    select * from {{ source('financiera', 'card') }}
+    select * from {{ ref('base_financiera__card') }}
 
 ),
 
@@ -11,13 +11,13 @@ renamed as (
     select
         card_id,
         disp_id,
-        type as type_card,
-        TO_TIMESTAMP(ISSUED, 'YYMMDD HH24:MI:SS') AS issued_at,
-        _fivetran_deleted as data_deleted,
-        _fivetran_synced as date_load
+        initcap(type_card) as type_card,
+        TO_TIMESTAMP(issued_at, 'YYMMDD HH24:MI:SS') as issued_at,
+        data_deleted,
+        date_load
 
     from source
 
 )
 
-select * from renamed   
+select * from renamed

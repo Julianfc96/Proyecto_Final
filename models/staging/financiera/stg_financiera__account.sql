@@ -2,7 +2,7 @@ with
 
 source as (
 
-    select * from {{ source('financiera', 'account') }}
+    select * from {{ ref('base_financiera__account') }}
 
 ),
 
@@ -12,14 +12,14 @@ renamed as (
         account_id,
         district_id,
         CASE
-            WHEN frequency LIKE 'POPLATEK MESICNE' then 'EMISIÓN MENSUAL'
-            WHEN frequency LIKE 'POPLATEK PO OBRATU' then 'EMISIÓN POR TRANSACCIÓN'
-            WHEN frequency LIKE 'POPLATEK TYDNE' then 'EMISIÓN SEMANAL'
-        END as frequency,
+            WHEN payment_frequency LIKE 'POPLATEK MESICNE' then 'EMISIÓN MENSUAL'
+            WHEN payment_frequency LIKE 'POPLATEK PO OBRATU' then 'EMISIÓN POR TRANSACCIÓN'
+            WHEN payment_frequency LIKE 'POPLATEK TYDNE' then 'EMISIÓN SEMANAL'
+        END as payment_frequency,
         -- Esto representa la frecuencia de la cuenta para los pagos//sacar de aquí
-        to_date(concat('19', to_char(date)), 'YYYYMMDD') as created_at,
-       _fivetran_deleted as data_deleted,
-        _fivetran_synced as date_load
+        {{ convert_date_format('created_at') }} as created_at,
+        data_deleted,
+        date_load
     from source
 
 )

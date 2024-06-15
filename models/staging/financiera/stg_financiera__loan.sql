@@ -11,10 +11,10 @@ renamed as (
     select
         loan_id,
         account_id,
-        loan_create_at,
-        loan_amount,
+        {{convert_date_format('loan_create_at') }} as loan_create_at,
+        {{convert_to_eur('amount')}},
         duration,
-        payments,
+        {{convert_to_eur('payments')}},
         CASE 
             WHEN status is not null then {{dbt_utils.generate_surrogate_key(['status'])}}
             else null 

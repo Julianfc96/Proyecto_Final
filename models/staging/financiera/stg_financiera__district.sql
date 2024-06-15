@@ -2,21 +2,22 @@ with
 
 source as (
 
-    select * from {{ source('financiera', 'district') }}
+    select * from {{ ref('base_financiera__district') }}
 
 ),
 
 renamed as (
 
     select
-        a1 as district_id, --Distrito financiero, sucursal del cliente
-        a2 as district_name,
-        a3 as region,
-        _fivetran_deleted as data_deleted,
-        _fivetran_synced as date_load
+        district_id, --Distrito financiero, sucursal del cliente
+        district_name,
+        initcap(region) as region,
+        data_deleted,
+        date_load
 
     from source
 
 )
 
 select * from renamed
+order by district_id

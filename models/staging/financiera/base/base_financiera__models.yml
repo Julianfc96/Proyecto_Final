@@ -1,10 +1,8 @@
 version: 2
 
 models:
-
-
-  - name: stg_financiera__account
-    description: "Transformación de la tabla account en la etapa stg"
+  - name: base_financiera__account
+    description: "Transformación básica de la tabla account"
     columns:
       - name: account_id
         description: "Identificador único de la cuenta"
@@ -15,20 +13,19 @@ models:
         description: "ID del distrito al que pertenece la cuenta"
         tests:
           - relationships:
-              to: ref('stg_financiera__district')
+              to: ref('base_financiera__district')
               field: district_id
       - name: payment_frequency
         description: "Frecuencia de las transacciones de la cuenta"
       - name: created_at
-        description: "Fecha de creación de la cuenta"
+        description: "Fecha creación de la cuenta"
       - name: data_deleted
         description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
       - name: date_load
         description: "Marca de tiempo del instante de carga con Fivetran"
 
-
-  - name: stg_financiera__card
-    description: "Transformación de la tabla base_financiera__card a staging"
+  - name: base_financiera__card
+    description: "Transformación básica de la tabla card"
     columns:
       - name: card_id
         description: "Identificador único de la tarjeta"
@@ -39,7 +36,7 @@ models:
         description: "Identificador único de tabla disp"
         tests:
           - relationships:
-              to: ref('stg_financiera__disp')
+              to: ref('base_financiera__disp')
               field: disp_id
       - name: type_card
         description: "Tipo de tarjeta"
@@ -50,9 +47,8 @@ models:
       - name: date_load
         description: "Marca de tiempo del instante de carga con Fivetran"
 
-
-  - name: stg_financiera__client_disp
-    description: "Transformación de las tablas base_financiera__client y base_financiera__disp a staging"
+  - name: base_financiera__client
+    description: "Transformación básica de la tabla client"
     columns:
       - name: client_id
         description: "Identificador único del cliente"
@@ -63,22 +59,36 @@ models:
         description: "ID del distrito al que pertenece el cliente"
         tests:
           - relationships:
-              to: ref('stg_financiera__district')
+              to: ref('base_financiera__district')
               field: district_id
       - name: gender
         description: "Género del cliente"
       - name: birth_date
         description: "Fecha de nacimiento del cliente"
+      - name: data_deleted
+        description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+
+  - name: base_financiera__disp
+    description: "Transformación básica de la tabla disp"
+    columns:
       - name: disp_id
         description: "Identificador único de la disposición"
         tests:
           - unique
           - not_null
-      - name: account_id
-        description: "Identificador único de la cuenta asociada a la disposición"
+      - name: client_id
+        description: "Identificador único del cliente asociado"
         tests:
           - relationships:
-              to: ref('stg_financiera__account')
+              to: ref('base_financiera__client')
+              field: client_id
+      - name: account_id
+        description: "Identificador único de la cuenta asociada"
+        tests:
+          - relationships:
+              to: ref('base_financiera__account')
               field: account_id
       - name: account_user
         description: "Tipo de disposición"
@@ -87,10 +97,8 @@ models:
       - name: date_load
         description: "Marca de tiempo del instante de carga con Fivetran"
 
-
-
-  - name: stg_financiera__district
-    description: "Transformación de la tabla base_financiera__district a staging"
+  - name: base_financiera__district
+    description: "Transformación básica de la tabla district"
     columns:
       - name: district_id
         description: "Identificador único del distrito"
@@ -98,7 +106,7 @@ models:
           - unique
           - not_null
       - name: district_name
-        description: "Nombre del distrito financiero"
+        description: "Nombre del distrito"
       - name: region
         description: "Región del distrito"
       - name: data_deleted
@@ -106,9 +114,8 @@ models:
       - name: date_load
         description: "Marca de tiempo del instante de carga con Fivetran"
 
-
-  - name: stg_financiera__loan
-    description: "Transformación de la tabla base_financiera__loan a staging"
+  - name: base_financiera__loan
+    description: "Transformación básica de la tabla loan"
     columns:
       - name: loan_id
         description: "Identificador único del préstamo"
@@ -116,35 +123,32 @@ models:
           - unique
           - not_null
       - name: account_id
-        description: "Identificador único de la cuenta asociada al préstamo"
+        description: "Identificador único de la cuenta asociada"
         tests:
           - relationships:
-              to: ref('stg_financiera__account')
+              to: ref('base_financiera__account')
               field: account_id
+          - not_null
       - name: loan_create_at
         description: "Fecha de creación del préstamo"
       - name: amount
-        description: "Monto del préstamo en euros"
+        description: "Monto del préstamo"
       - name: duration
         description: "Duración del préstamo en meses"
       - name: payments
-        description: "Pagos realizados en euros"
-      - name: status_id
-        description: "ID generado para el estado del préstamo"
-        tests:
-          - not_null
+        description: "Pagos realizados"
       - name: status
         description: "Estado del préstamo"
         tests:
           - accepted_values:
-              values: ["Contrato terminado, sin problemas", "Contrato terminado, préstamo no pagado", "Contrato en ejecución, pagos correctos", "Contrato en ejecución, cliente endeudado"]
+              values: ["A", "B", "C", "D"]
       - name: data_deleted
         description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
       - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
 
-
-  - name: stg_financiera__trans
-    description: "Transformación de la tabla base_financiera__trans a staging"
+  - name: base_financiera__trans
+    description: "Transformación básica de la tabla trans"
     columns:
       - name: trans_id
         description: "Identificador único de la transacción"
@@ -152,42 +156,56 @@ models:
           - unique
           - not_null
       - name: account_id
-        description: "Identificador único de la cuenta asociada a la transacción"
+        description: "Identificador único de la cuenta asociada"
         tests:
           - relationships:
-              to: ref('stg_financiera__account')
+              to: ref('base_financiera__account')
               field: account_id
+          - not_null
       - name: operation_date
         description: "Fecha de la operación"
-      - name: operation_id
-        description: "ID generado para la operación de la transacción"
-        tests:
-          - not_null
       - name: trans_type
         description: "Tipo de transacción"
         tests:
           - accepted_values:
-              values: ['CRÉDITO', 'GASTO', 'RETIRO', 'OPERACIÓN DESCONOCIDA']
+              values: ["PRIJEM", "VYDAJ", "VYBER"]
       - name: operation
-        description: "Descripción de la operación"
+        description: "Tipo de operación realizada"
         tests:
           - accepted_values:
-              values: ['RETIRO DE TARJETA DE CRÉDITO', 'CRÉDITO EN EFECTIVO', 'COBRO DE OTRO BANCO', 'RETIRO EN EFECTIVO', 'TRANSFERENCIA A OTRO BANCO', 'OPERACIÓN DESCONOCIDA']
+              values:
+                [
+                  "VYBER KARTOU",
+                  "VKLAD",
+                  "PREVOD Z UCTU",
+                  "VYBER",
+                  "PREVOD NA UCET",
+                  "",
+                ]
       - name: amount
-        description: "Monto de la transacción en euros"
+        description: "Monto de la transacción"
       - name: balance
-        description: "Saldo después de la transacción en euros"
+        description: "Saldo después de la transacción"
       - name: trans_desc
-        description: "Descripción detallada de la transacción"
+        description: "Descripción de la transacción"
         tests:
           - accepted_values:
-              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERÉS ACREDITADO', 'INTERÉS DE SANCIÓN POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSIÓN POR VEJEZ', 'PAGO DE PRÉSTAMO']
-      - name: partner_bank_id
-        description: "ID generado para el banco asociado a la transacción"
-      - name: partner_bank
+              values:
+                [
+                  "POJISTNE",
+                  "SLUZBY",
+                  "UROK",
+                  "SANKC. UROK",
+                  "SIPO",
+                  "DUCHOD",
+                  "UVER",
+                  "",
+                  " ",
+                ]
+      - name: bank
         description: "Nombre del banco asociado"
-      - name: partner_account
-        description: "Cuenta del socio asociado"
+      - name: account_to
+        description: "Cuenta destino"
       - name: data_deleted
         description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
       - name: date_load

@@ -12,7 +12,7 @@ renamed as (
         loan_id,
         account_id,
         date as loan_create_at,
-        amount as loan_amount,
+        amount,
         duration,
         payments,
         status,
