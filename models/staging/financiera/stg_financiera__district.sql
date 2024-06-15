@@ -1,3 +1,8 @@
+{{ config(
+    materialized='incremental',
+    unique_key='district_id'
+) }}
+
 with 
 
 source as (
@@ -16,7 +21,10 @@ renamed as (
         date_load
 
     from source
-
+    
+    {% if is_incremental() %}
+        where date_load > (select max(date_load) from {{ this }})
+    {% endif %}
 )
 
 select * from renamed

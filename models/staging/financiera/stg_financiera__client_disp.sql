@@ -1,3 +1,8 @@
+{{ config(
+    materialized='incremental',
+    unique_key='client_id'
+) }}
+
 with 
 
 source_disp as (
@@ -23,6 +28,8 @@ renamed_client as (
         district_id,
         gender,
         birth_date,
+        data_deleted,
+        date_load
     from source_client
 ),
 
@@ -36,8 +43,14 @@ combined as (
         c.gender,
         d.account_user,
         c.birth_date,
+        c.data_deleted,
+        c.date_load
     from renamed_disp d
     left join renamed_client c on d.client_id = c.client_id
+
+    {% if is_incremental() %}
+        where date_load > (select max(date_load) from {{ this }})
+    {% endif %}
 )
 
 select * from combined
