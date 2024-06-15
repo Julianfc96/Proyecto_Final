@@ -1,3 +1,8 @@
+{{ config(
+    materialized='incremental',
+    unique_key='account_id'
+) }}
+
 with 
 
 source as (
@@ -21,6 +26,10 @@ renamed as (
         data_deleted,
         date_load
     from source
+
+    {% if is_incremental() %}
+        where date_load > (select max(date_load) from {{ this }})
+    {% endif %}
 
 )
 

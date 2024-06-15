@@ -1,3 +1,8 @@
+{{ config(
+    materialized='incremental',
+    unique_key='trans_id'
+) }}
+
 with 
 
 source as (
@@ -51,6 +56,9 @@ renamed as (
     left join card c on d.disp_id = c.disp_id 
     left join account a on l.account_id = a.account_id
 
+    {% if is_incremental() %}
+        where date_load > (select max(date_load) from {{ this }})
+    {% endif %}
 )
 
 select * from renamed
