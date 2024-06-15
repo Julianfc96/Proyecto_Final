@@ -1,0 +1,277 @@
+version: 2
+
+sources:
+  - name: financiera
+    description: ""
+    database: alumno26_dev_bronze_db
+    schema: SNOWFLAKE_DB_FINANCIERA
+    tables:
+      - name: account
+        description: "Información de cuentas bancarias"
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: "ID generado por Fivetran para el registro"
+          - name: date
+            data_type: number
+            description: "Fecha creación de la cuenta"
+          - name: frequency
+            data_type: varchar
+            description: "Frecuencia de las transacciones de la cuenta"
+          - name: account_id
+            data_type: number
+            description: "Identificador único de la cuenta"
+            tests: 
+              - unique
+              - not_null
+          - name: district_id
+            data_type: number
+            description: "ID del distrito al que pertenece la cuenta"
+            tests:
+            - relationships:
+                to: source('financiera','district')
+                field: a1
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: "Marca de tiempo del instante de carga con Fivetran"
+
+
+      - name: card
+        description: "Tabla de tarjetas financieras."
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: "ID generado por Fivetran para el registro"
+          - name: card_id
+            data_type: number
+            description: "Identificador único de la tarjeta"
+            tests:
+              - unique
+              - not_null
+          - name: type
+            data_type: varchar
+            description: "Tipo de tarjeta"
+          - name: issued
+            data_type: varchar
+            description: "Fecha de emisión de la tarjeta"
+          - name: disp_id
+            data_type: number
+            description: "Identificador único de tabla disp"
+            tests:
+            - relationships:
+                to: source('financiera','disp')
+                field: disp_id
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: "Marca de tiempo del instante de carga con Fivetran"
+
+
+      - name: client
+        description: "Tabla de clientes."
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: "ID generado por Fivetran para el registro"
+          - name: client_id
+            data_type: number
+            description: "Identificador único del cliente"
+            tests:
+              - unique
+              - not_null
+          - name: birth_date
+            data_type: date
+            description: "Fecha de nacimiento del cliente"
+          - name: gender
+            data_type: varchar
+            description: "Género del cliente"
+          - name: district_id
+            data_type: number
+            description: "ID del distrito al que pertenece el cliente"
+            tests:
+            - relationships:
+                to: source('financiera','district')
+                field: a1
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: "Marca de tiempo del instante de carga con Fivetran"
+
+
+      - name: disp
+        description: "Tabla de disposición de clientes."
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: "ID generado por Fivetran para el registro"
+          - name: disp_id
+            data_type: number
+            description: "Identificador único de la disposición"
+            tests:
+              - unique
+              - not_null
+          - name: type
+            data_type: varchar
+            description: "Tipo de disposición"
+          - name: client_id
+            data_type: number
+            description: "Identificador único del cliente asociado"
+            tests:
+              - relationships:
+                  to: source('financiera', 'client')
+                  field: client_id
+          - name: account_id
+            data_type: number
+            description: "Identificador único de la cuenta asociada"
+            tests:
+              - relationships:
+                  to: source('financiera', 'account')
+                  field: account_id
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: "Marca de tiempo del instante de carga con Fivetran"
+
+
+      - name: district
+        description: "Tabla de distritos financieros."
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: "ID generado por Fivetran para el registro"
+          - name: a1
+            data_type: number
+            description: "Identificador único del distrito"
+            tests:
+              - unique
+              - not_null
+          - name: a2
+            data_type: varchar
+            description: "Nombre del distrito"
+          - name: a3
+            data_type: varchar
+            description: "Región del distrito"
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: "Marca de tiempo del instante de carga con Fivetran"
+
+
+      - name: loan
+        description: "Tabla de préstamos financieros."
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: "ID generado por Fivetran para el registro"
+          - name: payments
+            data_type: float
+            description: "Pagos realizados"
+          - name: account_id
+            data_type: number
+            description: "Identificador único de la cuenta asociada"
+            tests:
+              - relationships:
+                  to: source('financiera', 'account')
+                  field: account_id
+              - not_null
+          - name: amount
+            data_type: number
+            description: "Monto del préstamo"
+          - name: duration
+            data_type: number
+            description: "Duración del préstamo en meses"
+          - name: date
+            data_type: number
+            description: "Fecha del préstamo"
+          - name: loan_id
+            data_type: number
+            description: "Identificador único del préstamo"
+            tests:
+              - unique
+              - not_null
+          - name: status
+            data_type: varchar
+            description: "Estado del préstamo"
+            tests:
+              - accepted_values:
+                  values: ['A', 'B', 'C', 'D']
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: "Marca de tiempo del instante de carga con Fivetran"
+
+
+
+      - name: trans
+        description: "Tabla de transacciones financieras."
+        columns:
+          - name: _fivetran_id
+            data_type: varchar
+            description: "ID generado por Fivetran para el registro"
+          - name: account
+            data_type: varchar
+            description: "Nombre de la cuenta asociada"
+          - name: balance
+            data_type: float
+            description: "Saldo después de la transacción"
+          - name: k_symbol
+            data_type: varchar
+            description: "Símbolo de categoría de la transacción"
+            tests:
+              - accepted_values:
+                  values: ['POJISTNE', 'SLUZBY', 'UROK', 'SANKC. UROK', 'SIPO', 'DUCHOD', 'UVER', '', ' ']
+          - name: operation
+            data_type: varchar
+            description: "Tipo de operación realizada"
+            tests:
+              - accepted_values:
+                  values: ['VYBER KARTOU', 'VKLAD', 'PREVOD Z UCTU', 'VYBER', 'PREVOD NA UCET', '']
+          - name: bank
+            data_type: varchar
+            description: "Nombre del banco asociado"
+          - name: account_id
+            data_type: number
+            description: "Identificador único de la cuenta asociada"
+            tests:
+              - relationships:
+                  to: source('financiera', 'account')
+                  field: account_id
+              - not_null
+          - name: amount
+            data_type: float
+            description: "Monto de la transacción"
+          - name: date
+            data_type: number
+            description: "Fecha de la transacción"
+          - name: trans_id
+            data_type: number
+            description: "Identificador único de la transacción"
+            tests:
+              - unique
+              - not_null
+          - name: type
+            data_type: varchar
+            description: "Tipo de transacción"
+            tests:
+              - accepted_values:
+                  values: ['PRIJEM', 'VYDAJ', 'VYBER']
+          - name: _fivetran_deleted
+            data_type: boolean
+            description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+          - name: _fivetran_synced
+            data_type: timestamp_tz
+            description: "Marca de tiempo del instante de carga con Fivetran"
+

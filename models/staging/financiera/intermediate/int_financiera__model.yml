@@ -1,0 +1,117 @@
+version: 2
+
+models:
+
+  - name: int_financiera__loan
+    description: "Unión de la tabla stg_financiera__loan con stg_financiera__card y stg_financiera__account"
+    columns:
+      - name: loan_id
+        description: "Identificador único del préstamo"
+        tests:
+          - not_null
+      - name: account_id
+        description: "Identificador único de la cuenta asociada al préstamo"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_financiera__account')
+              field: account_id
+      - name: loan_create_at
+        description: "Fecha de creación del préstamo"
+      - name: amount_EUR
+        description: "Monto del préstamo en euros"
+      - name: duration
+        description: "Duración del préstamo en meses"
+      - name: payments_EUR
+        description: "Pagos del préstamo en euros"
+      - name: status_id
+        description: "ID generado para el estado del préstamo"
+      - name: status
+        description: "Estado del préstamo"
+      - name: data_deleted
+        description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+      - name: card_id
+        description: "Identificador máximo de la tarjeta asociada"
+        tests:
+          - relationships:
+              to: ref('stg_financiera__card')
+              field: card_id
+      - name: client_id
+        description: "Identificador máximo del cliente asociado"
+        tests:
+          - relationships:
+              to: ref('stg_financiera__client_disp')
+              field: client_id
+      - name: district_id
+        description: "Identificador del distrito asociado a la cuenta"
+        tests:
+          - relationships:
+              to: ref('stg_financiera__account')
+              field: district_id
+
+
+  - name: int_financiera__trans
+    description: "Unión de la tabla stg_financiera__trans con stg_financiera__card, stg_financiera__client_disp y stg_financiera__account"
+    columns:
+      - name: trans_id
+        description: "Identificador único de la transacción"
+        tests:
+          - not_null
+      - name: account_id
+        description: "Identificador único de la cuenta asociada a la transacción"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_financiera__account')
+              field: account_id
+      - name: operation_date
+        description: "Fecha de la operación"
+      - name: operation_id
+        description: "ID generado para la operación de la transacción"
+        tests:
+          - not_null
+      - name: operation
+        description: "Descripción de la operación"
+        tests:
+          - accepted_values:
+              values: ['RETIRO DE TARJETA DE CRÉDITO', 'CRÉDITO EN EFECTIVO', 'COBRO DE OTRO BANCO', 'RETIRO EN EFECTIVO', 'TRANSFERENCIA A OTRO BANCO', 'OPERACIÓN DESCONOCIDA']
+      - name: trans_type
+        description: "Tipo de transacción"
+        tests:
+          - accepted_values:
+              values: ['CRÉDITO', 'GASTO', 'RETIRO', 'OPERACIÓN DESCONOCIDA']
+      - name: amount_EUR
+        description: "Monto de la transacción en euros"
+      - name: balance_EUR
+        description: "Saldo después de la transacción en euros"
+      - name: trans_desc
+        description: "Descripción detallada de la transacción"
+        tests:
+          - accepted_values:
+              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERÉS ACREDITADO', 'INTERÉS DE SANCIÓN POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSIÓN POR VEJEZ', 'PAGO DE PRÉSTAMO', null]
+      - name: partner_bank_id
+        description: "ID generado para el banco asociado a la transacción"
+      - name: partner_bank
+        description: "Nombre del banco asociado"
+      - name: partner_account
+        description: "Cuenta del socio asociado"
+      - name: data_deleted
+        description: "Indicador de si el registro ha sido borrado en el sistema transaccional"
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+      - name: card_id
+        description: "Identificador máximo de la tarjeta asociada"
+        tests:
+          - relationships:
+              to: ref('stg_financiera__card')
+              field: card_id
+      - name: client_id
+        description: "Identificador máximo del cliente asociado"
+        tests:
+          - relationships:
+              to: ref('stg_financiera__client_disp')
+              field: client_id
+      - name: district_id
+        description: "Identificador del distrito asociado"
