@@ -9,9 +9,9 @@ source as (
 final as (
     
     select distinct 
-        {{dbt_utils.generate_surrogate_key(['operation','trans_type'])}} as operation_id,
+        operation_id,
         operation, 
-        trans_type
+        operation_type
     from source
 
 )

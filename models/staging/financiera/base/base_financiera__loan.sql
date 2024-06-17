@@ -20,7 +20,5 @@ renamed as (
         _fivetran_synced as date_load
 
     from source
-
 )
-
 select * from renamed

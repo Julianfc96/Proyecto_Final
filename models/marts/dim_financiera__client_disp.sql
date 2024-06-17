@@ -1,3 +1,8 @@
+{{ config(
+    materialized='incremental',
+    unique_key='client_id'
+) }}
+
 with 
 
 source as (
@@ -11,8 +16,12 @@ final as (
         gender,
         account_user,
         birth_date,
-        {{ calculate_age('birth_date') }} as age_at_1998
+        {{ calculate_age('birth_date') }} as age_at_1998,
+        date_load
     from source
+        {% if is_incremental() %}
+        where date_load > (select max(date_load) from {{ this }})
+        {% endif %}
 )
 
 select * from final

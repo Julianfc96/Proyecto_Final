@@ -2,7 +2,6 @@
     materialized='incremental',
     unique_key='loan_id'
 ) }}
-
 with 
 
 source as (
@@ -34,7 +33,7 @@ renamed as (
         l.account_id,
         l.loan_create_at,
         l.amount_EUR,
-        l.duration,
+        dateadd(month, estimated_end_date, loan_create_at) as estimated_end_date,
         l.payments_EUR,
         l.status_id,
         l.status,
@@ -47,9 +46,8 @@ renamed as (
     left join disp d on l.account_id = d.account_id
     left join card c on d.disp_id = c.disp_id 
     left join account a on l.account_id = a.account_id
-
     {% if is_incremental() %}
-        where date_load > (select max(date_load) from {{ this }})
+    where l.date_load > (select max(date_load) from {{ this }})
     {% endif %}
 )
 
