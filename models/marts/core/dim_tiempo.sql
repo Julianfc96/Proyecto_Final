@@ -18,7 +18,7 @@ final AS (
         extract(quarter from date) as quarter
     FROM
         dates
-    WHERE date::date BETWEEN '1993-01-01' AND '1998-12-31'
+    WHERE date::date BETWEEN '1993-01-01' AND '2003-12-31'
 )
 
 SELECT * FROM final
