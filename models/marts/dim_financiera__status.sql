@@ -9,7 +9,7 @@ source as (
 final as (
     
     select distinct 
-        {{dbt_utils.generate_surrogate_key(['status'])}} as status_id,
+        status_id,
         status
     from source
 

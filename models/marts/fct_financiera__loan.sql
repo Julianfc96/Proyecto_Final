@@ -1,3 +1,7 @@
+{{ config(
+    materialized='incremental',
+    unique_key='loan_id'
+) }}
 with 
 
 source as (
@@ -14,12 +18,14 @@ final as (
         client_id,
         district_id,
         amount_EUR,
-        duration,
+        estimated_end_date,
         payments_EUR,
         status_id,
+        date_load
     from source 
+    {% if is_incremental() %}
+        where date_load > (select max(date_load) from {{ this }})
+    {% endif %}
 )
 
 select * from final
-
--- prestamos según si pagan semanal o mensual

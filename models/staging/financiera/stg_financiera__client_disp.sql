@@ -47,9 +47,8 @@ combined as (
         c.date_load
     from renamed_disp d
     left join renamed_client c on d.client_id = c.client_id
-
     {% if is_incremental() %}
-        where date_load > (select max(date_load) from {{ this }})
+    where c.date_load > (select max(date_load) from {{ this }})
     {% endif %}
 )
 

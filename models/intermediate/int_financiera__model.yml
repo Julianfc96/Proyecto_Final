@@ -20,8 +20,8 @@ models:
         description: "Fecha de creación del préstamo"
       - name: amount_EUR
         description: "Monto del préstamo en euros"
-      - name: duration
-        description: "Duración del préstamo en meses"
+      - name: estimated_end_date
+        description: "Fecha final del préstamo en meses"
       - name: payments_EUR
         description: "Pagos del préstamo en euros"
       - name: status_id
@@ -66,7 +66,7 @@ models:
           - relationships:
               to: ref('stg_financiera__account')
               field: account_id
-      - name: operation_date
+      - name: trans_date
         description: "Fecha de la operación"
       - name: operation_id
         description: "ID generado para la operación de la transacción"
@@ -76,12 +76,12 @@ models:
         description: "Descripción de la operación"
         tests:
           - accepted_values:
-              values: ['RETIRO DE TARJETA DE CRÉDITO', 'CRÉDITO EN EFECTIVO', 'COBRO DE OTRO BANCO', 'RETIRO EN EFECTIVO', 'TRANSFERENCIA A OTRO BANCO', 'OPERACIÓN DESCONOCIDA']
-      - name: trans_type
+              values: ['RETIRO DE TARJETA DE CREDITO', 'CREDITO EN EFECTIVO', 'COBRO DE OTRO BANCO', 'RETIRO EN EFECTIVO', 'TRANSFERENCIA A OTRO BANCO', 'OPERACION DESCONOCIDA']
+      - name: operation_type
         description: "Tipo de transacción"
         tests:
           - accepted_values:
-              values: ['CRÉDITO', 'GASTO', 'RETIRO', 'OPERACIÓN DESCONOCIDA']
+              values: ['CREDITO', 'GASTO', 'RETIRO', 'OPERACIÓN DESCONOCIDA']
       - name: amount_EUR
         description: "Monto de la transacción en euros"
       - name: balance_EUR
@@ -90,7 +90,7 @@ models:
         description: "Descripción detallada de la transacción"
         tests:
           - accepted_values:
-              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERÉS ACREDITADO', 'INTERÉS DE SANCIÓN POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSIÓN POR VEJEZ', 'PAGO DE PRÉSTAMO', null]
+              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO', null]
       - name: partner_bank_id
         description: "ID generado para el banco asociado a la transacción"
       - name: partner_bank

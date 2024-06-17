@@ -17,8 +17,8 @@ models:
           - relationships:
               to: ref('stg_financiera__district')
               field: district_id
-      - name: payment_frequency
-        description: "Frecuencia de las transacciones de la cuenta"
+      - name: statement_frequency
+        description: "Frecuencia de emisión de estados de cuenta"
       - name: created_at
         description: "Fecha de creación de la cuenta"
       - name: data_deleted
@@ -125,8 +125,8 @@ models:
         description: "Fecha de creación del préstamo"
       - name: amount
         description: "Monto del préstamo en euros"
-      - name: duration
-        description: "Duración del préstamo en meses"
+      - name: estimated_end_date
+        description: "Fecha final del préstamo en meses"
       - name: payments
         description: "Pagos realizados en euros"
       - name: status_id
@@ -157,22 +157,22 @@ models:
           - relationships:
               to: ref('stg_financiera__account')
               field: account_id
-      - name: operation_date
+      - name: trans_date
         description: "Fecha de la operación"
       - name: operation_id
         description: "ID generado para la operación de la transacción"
         tests:
           - not_null
-      - name: trans_type
+      - name: operation_type
         description: "Tipo de transacción"
         tests:
           - accepted_values:
-              values: ['CRÉDITO', 'GASTO', 'RETIRO', 'OPERACIÓN DESCONOCIDA']
+              values: ['CREDITO', 'GASTO', 'RETIRO']
       - name: operation
         description: "Descripción de la operación"
         tests:
           - accepted_values:
-              values: ['RETIRO DE TARJETA DE CRÉDITO', 'CRÉDITO EN EFECTIVO', 'COBRO DE OTRO BANCO', 'RETIRO EN EFECTIVO', 'TRANSFERENCIA A OTRO BANCO', 'OPERACIÓN DESCONOCIDA']
+              values: ['RETIRO DE TARJETA DE CREDITO', 'CREDITO EN EFECTIVO', 'COBRO DE OTRO BANCO', 'RETIRO EN EFECTIVO', 'TRANSFERENCIA A OTRO BANCO', 'OPERACION DESCONOCIDA']
       - name: amount
         description: "Monto de la transacción en euros"
       - name: balance
@@ -181,9 +181,7 @@ models:
         description: "Descripción detallada de la transacción"
         tests:
           - accepted_values:
-              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERÉS ACREDITADO', 'INTERÉS DE SANCIÓN POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSIÓN POR VEJEZ', 'PAGO DE PRÉSTAMO']
-      - name: partner_bank_id
-        description: "ID generado para el banco asociado a la transacción"
+              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO']
       - name: partner_bank
         description: "Nombre del banco asociado"
       - name: partner_account

@@ -1,0 +1,243 @@
+version: 2
+
+models:
+  - name: dim_financiera__account
+    description: "Tabla de dimensión de cuentas financieras"
+    columns:
+      - name: account_id
+        description: "ID de la cuenta"
+        tests:
+          - unique
+          - not_null
+      - name: statement_frequency
+        description: "Frecuencia de emisión de estados de cuenta"
+      - name: created_at
+        description: "Fecha de creación de la cuenta"
+        tests:
+          - not_null
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+
+  - name: dim_financiera__card
+    description: "Tabla de dimensión de tarjetas financieras"
+    columns:
+      - name: card_id
+        description: "ID de la tarjeta"
+        tests:
+          - unique
+          - not_null
+      - name: type_card
+        description: "Tipo de tarjeta"
+      - name: issued_at
+        description: "Fecha de emisión de la tarjeta"
+        tests:
+          - not_null
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+
+  - name: dim_financiera__client_disp
+    description: "Tabla de dimensión de clientes y disposiciones financieras"
+    columns:
+      - name: client_id
+        description: "ID del cliente"
+        tests:
+          - unique
+          - not_null
+      - name: gender
+        description: "Género del cliente"
+      - name: account_user
+        description: "Usuario de la cuenta del cliente"
+      - name: birth_date
+        description: "Fecha de nacimiento del cliente"
+        tests:
+          - not_null
+      - name: age_at_1998
+        description: "Edad del cliente en 1998"
+        tests:
+          - not_null
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+
+
+  - name: dim_financiera__district
+    description: "Tabla de dimensión de distritos financieros"
+    columns:
+      - name: district_id
+        description: "ID del distrito"
+        tests:
+          - unique
+          - not_null
+      - name: district_name
+        description: "Nombre del distrito"
+        tests:
+          - not_null
+      - name: region
+        description: "Región del distrito"
+      - name: date_load
+        description: "Fecha de carga de datos"
+        tests:
+          - not_null
+
+
+  - name: dim_financiera__operation
+    description: "Tabla de dimensión de operaciones financieras"
+    columns:
+      - name: operation_id
+        description: "ID de la operación"
+        tests:
+          - unique
+          - not_null
+      - name: operation
+        description: "Descripción de la operación"
+        tests:
+          - accepted_values:
+              values: ['RETIRO DE TARJETA DE CREDITO', 'CREDITO EN EFECTIVO', 'COBRO DE OTRO BANCO', 'RETIRO EN EFECTIVO', 'TRANSFERENCIA A OTRO BANCO', 'OPERACION DESCONOCIDA']
+      - name: operation_type
+        description: "Tipo de transacción"
+        tests:
+          - accepted_values:
+              values: ['CREDITO', 'GASTO', 'RETIRO', 'OPERACIÓN DESCONOCIDA']
+
+
+  - name: dim_financiera__status
+    description: "Tabla de dimensión de estados de préstamos"
+    columns:
+      - name: status_id
+        description: "ID del estado del préstamo"
+        tests:
+          - unique
+          - not_null
+      - name: status
+        description: "Estado del préstamo"
+        tests:
+          - not_null
+
+  - name: dim_financiera__partner_bank
+    description: "Tabla de dimensión de socios bancarios"
+    columns:
+      - name: partner_bank_id
+        description: "ID del socio bancario"
+        tests:
+          - unique
+          - not_null
+      - name: partner_bank
+        description: "Nombre del socio bancario"
+        tests:
+          - not_null
+      - name: partner_account
+        description: "Cuenta del socio bancario"
+        tests:
+          - not_null
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+
+  - name: fct_financiera__loan
+    description: "Tabla de hechos de los préstamos"
+    columns:
+      - name: loan_id
+        description: "Identificador único del préstamo"
+        tests:
+          - not_null
+      - name: account_id
+        description: "Identificador único de la cuenta asociada al préstamo"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_financiera__account')
+              field: account_id
+      - name: loan_create_at
+        description: "Fecha de creación del préstamo"
+      - name: amount_EUR
+        description: "Monto del préstamo en euros"
+      - name: duration
+        description: "Duración del préstamo en meses"
+      - name: payments_EUR
+        description: "Pagos del préstamo en euros"
+      - name: status_id
+        description: "ID generado para el estado del préstamo"
+        tests:  
+          - relationships:
+              to: ref('dim_financiera__status')
+              field: status_id
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+      - name: card_id
+        description: "Identificador máximo de la tarjeta asociada"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__card')
+              field: card_id
+      - name: client_id
+        description: "Identificador máximo del cliente asociado"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__client_disp')
+              field: client_id
+      - name: district_id
+        description: "Identificador del distrito asociado a la cuenta"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__district')
+              field: district_id
+
+
+  - name: fct_financiera__trans
+    description: "Tabla de hechos de las transacciones"
+    columns:
+      - name: trans_id
+        description: "Identificador único de la transacción"
+        tests:
+          - not_null
+      - name: account_id
+        description: "Identificador único de la cuenta asociada a la transacción"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_financiera__account')
+              field: account_id
+      - name: trans_date
+        description: "Fecha de la operación"
+      - name: operation_id
+        description: "ID generado para la operación de la transacción"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_financiera__operation')
+              field: operation_id
+      - name: amount_EUR
+        description: "Monto de la transacción en euros"
+      - name: balance_EUR
+        description: "Saldo después de la transacción en euros"
+      - name: trans_desc
+        description: "Descripción detallada de la transacción"
+        tests:
+          - accepted_values:
+              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO', null]
+      - name: partner_bank_id
+        description: "ID generado para el banco asociado a la transacción"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__partner_bank')
+              field: partner_bank_id
+      - name: date_load
+        description: "Marca de tiempo del instante de carga con Fivetran"
+      - name: card_id
+        description: "Identificador máximo de la tarjeta asociada"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__card')
+              field: card_id
+      - name: client_id
+        description: "Identificador máximo del cliente asociado"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__client_disp')
+              field: client_id
+      - name: district_id
+        description: "Identificador del distrito asociado"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__district')
+              field: district_id

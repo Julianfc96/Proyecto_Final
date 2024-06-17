@@ -15,8 +15,8 @@ models:
           - relationships:
               to: ref('base_financiera__district')
               field: district_id
-      - name: payment_frequency
-        description: "Frecuencia de las transacciones de la cuenta"
+      - name: statement_frequency
+        description: "Frecuencia de emisión de estados de cuenta"
       - name: created_at
         description: "Fecha creación de la cuenta"
       - name: data_deleted
@@ -162,9 +162,9 @@ models:
               to: ref('base_financiera__account')
               field: account_id
           - not_null
-      - name: operation_date
+      - name: trans_date
         description: "Fecha de la operación"
-      - name: trans_type
+      - name: operation_type
         description: "Tipo de transacción"
         tests:
           - accepted_values:

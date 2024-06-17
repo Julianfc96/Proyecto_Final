@@ -2,7 +2,6 @@
     materialized='incremental',
     unique_key='trans_id'
 ) }}
-
 with 
 
 source as (
@@ -35,14 +34,22 @@ renamed as (
     select
         l.trans_id,
         l.account_id,
-        l.operation_date,
+        l.trans_date,
         l.operation_id,
         l.operation,
-        l.trans_type,
+        l.operation_type,
         l.amount_EUR,
+        ROUND(CASE
+            WHEN COALESCE(l.balance_eur - LAG(l.balance_eur) OVER (PARTITION BY l.account_id ORDER BY l.trans_date), 0) = 0
+                THEN l.amount_eur
+            ELSE COALESCE(l.balance_eur - LAG(l.balance_eur) OVER (PARTITION BY l.account_id ORDER BY l.trans_date), 0)
+        END, 2) AS cambio_balance,
         l.balance_EUR,
         l.trans_desc,
-        l.partner_bank_id,
+        CASE 
+            WHEN l.partner_bank is not null THEN {{dbt_utils.generate_surrogate_key(['partner_bank','partner_account'])}}
+            ELSE null
+        END as partner_bank_id,
         l.partner_bank,
         l.partner_account,
         l.data_deleted,
@@ -55,9 +62,8 @@ renamed as (
     left join disp d on l.account_id = d.account_id
     left join card c on d.disp_id = c.disp_id 
     left join account a on l.account_id = a.account_id
-
     {% if is_incremental() %}
-        where date_load > (select max(date_load) from {{ this }})
+    where l.date_load > (select max(date_load) from {{ this }})
     {% endif %}
 )
 

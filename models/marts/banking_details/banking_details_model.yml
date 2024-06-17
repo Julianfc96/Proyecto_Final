@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: account_balances
+    description: "Tabla de balances de cuentas con las últimas transacciones y sumas de operaciones"
+    columns:
+      - name: account_id
+        description: "ID de la cuenta"
+        tests:
+          - not_null
+      - name: last_trans_date
+        description: "Fecha de la última transacción"
+        tests:
+          - not_null
+      - name: retiro
+        description: "Suma de retiros"
+        tests:
+          - not_null
+      - name: gasto
+        description: "Suma de gastos"
+        tests:
+          - not_null
+      - name: credito
+        description: "Suma de créditos"
+        tests:
+          - not_null
+      - name: current_balance
+        description: "Saldo actual"
+        tests:
+          - not_null
