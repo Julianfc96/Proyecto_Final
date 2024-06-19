@@ -20,7 +20,7 @@ disp as (
     select
         account_id,
         max(disp_id) as disp_id, -- Suponiendo que queremos el máximo disp_id por account_id
-        max(client_id) as client_id
+        min(client_id) as client_id
     from {{ ref('stg_financiera__client_disp') }}
     group by account_id
 ),

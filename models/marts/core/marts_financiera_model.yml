@@ -151,7 +151,7 @@ models:
         description: "Fecha de creación del préstamo"
       - name: amount_EUR
         description: "Monto del préstamo en euros"
-      - name: duration
+      - name: estimated_end_date
         description: "Duración del préstamo en meses"
       - name: payments_EUR
         description: "Pagos del préstamo en euros"
@@ -214,7 +214,7 @@ models:
         description: "Descripción detallada de la transacción"
         tests:
           - accepted_values:
-              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO', null]
+              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO', 'DESCONOCIDO']
       - name: partner_bank_id
         description: "ID generado para el banco asociado a la transacción"
         tests:
@@ -241,3 +241,31 @@ models:
           - relationships:
               to: ref('dim_financiera__district')
               field: district_id
+
+
+  - name: dim_tiempo
+    description: "Tabla de dimensión de tiempo que cubre desde 1993-01-01 hasta 1998-12-31."
+    columns:
+      - name: time_id
+        description: "Clave única de la tabla de dimensión de tiempo."
+        tests:
+          - unique
+          - not_null
+      - name: date
+        description: "Fecha completa."
+        tests:
+          - not_null
+      - name: year
+        description: "Año de la fecha."
+      - name: month
+        description: "Mes de la fecha."
+      - name: month_name
+        description: "Nombre del mes de la fecha."
+      - name: day
+        description: "Día del mes de la fecha."
+      - name: number_week_day
+        description: "Número del día de la semana."
+      - name: week_day
+        description: "Nombre del día de la semana."
+      - name: quarter
+        description: "Trimestre de la fecha."

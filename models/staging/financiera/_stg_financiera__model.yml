@@ -123,11 +123,11 @@ models:
               field: account_id
       - name: loan_create_at
         description: "Fecha de creación del préstamo"
-      - name: amount
+      - name: amount_eur
         description: "Monto del préstamo en euros"
       - name: estimated_end_date
         description: "Fecha final del préstamo en meses"
-      - name: payments
+      - name: payments_eur
         description: "Pagos realizados en euros"
       - name: status_id
         description: "ID generado para el estado del préstamo"
@@ -173,15 +173,15 @@ models:
         tests:
           - accepted_values:
               values: ['RETIRO DE TARJETA DE CREDITO', 'CREDITO EN EFECTIVO', 'COBRO DE OTRO BANCO', 'RETIRO EN EFECTIVO', 'TRANSFERENCIA A OTRO BANCO', 'OPERACION DESCONOCIDA']
-      - name: amount
+      - name: amount_eur
         description: "Monto de la transacción en euros"
-      - name: balance
+      - name: balance_eur
         description: "Saldo después de la transacción en euros"
       - name: trans_desc
         description: "Descripción detallada de la transacción"
         tests:
           - accepted_values:
-              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO']
+              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO', 'DESCONOCIDO']
       - name: partner_bank
         description: "Nombre del banco asociado"
       - name: partner_account

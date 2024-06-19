@@ -1,0 +1,31 @@
+version: 2
+
+macros:
+  - name: calculate_age
+    description: |
+      Calcula la edad en años a partir de una fecha de nacimiento hasta el 31 de diciembre de 1998.
+    arguments:
+      - name: birth_date
+        description: La fecha de nacimiento del cliente.
+
+  - name: convert_to_eur
+    description: |
+      Convierte un campo numérico a euros usando un tipo de cambio de 0.040 y redondea a dos decimales.
+    arguments:
+      - name: numeric_field
+        description: El campo numérico que se convertirá a euros.
+
+  - name: convert_date_format
+    description: |
+      Convierte una fecha en formato YYMMDD a YYYY-MM-DD. Si la fecha es inválida, devuelve NULL.
+    arguments:
+      - name: date_column
+        description: La columna de fecha en formato YYMMDD.
+
+  - name: obtener_casos_sum
+    description: |
+      Genera una expresión SQL que suma el número de ocurrencias de cada valor especificado en una lista.
+    arguments:
+      - name: valores
+        description: |
+          Una lista de valores para los cuales se generará la suma de casos. El valor predeterminado es una lista vacía.

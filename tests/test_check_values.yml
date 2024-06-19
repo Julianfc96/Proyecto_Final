@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: check_values
+    description: "Valida que el balance total de las transacciones por cuenta coincida con el balance final registrado en la última transacción."
+    columns:
+      - name: account_id
+        description: "El identificador único de la cuenta."
+      - name: total_amount
+        description: "La suma total de las transacciones por cuenta, redondeada a dos decimales."
+      - name: last_balance
+        description: "El balance final registrado en la última transacción por cuenta."
+      - name: test_result
+        description: "El resultado de la validación, que puede ser 'PASS' si el balance total coincide con el balance final, o 'FAIL' en caso contrario."

@@ -43,7 +43,7 @@ renamed as (
             WHEN 'SIPO' then 'GASTOS DEL HOGAR'
             WHEN 'DUCHOD' then 'PENSION POR VEJEZ'
             WHEN 'UVER' then 'PAGO DE PRESTAMO'
-            ELSE NULLIF(TRIM(trans_desc), '')
+            ELSE 'DESCONOCIDO'
         END as trans_desc,
         nullif(bank, '') as partner_bank,
         nullif(account_to, 0) as partner_account,
