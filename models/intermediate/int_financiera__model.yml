@@ -90,7 +90,7 @@ models:
         description: "Descripción detallada de la transacción"
         tests:
           - accepted_values:
-              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO', null]
+              values: ['PAGO DE SEGURO', 'PAGO POR ESTADO DE CUENTA', 'INTERES ACREDITADO', 'INTERES DE SANCION POR SALDO NEGATIVO', 'GASTOS DEL HOGAR', 'PENSION POR VEJEZ', 'PAGO DE PRESTAMO', 'DESCONOCIDO']
       - name: partner_bank_id
         description: "ID generado para el banco asociado a la transacción"
       - name: partner_bank
@@ -115,3 +115,5 @@ models:
               field: client_id
       - name: district_id
         description: "Identificador del distrito asociado"
+      - name: cambio_balance
+        description: "Monto de la transacción en euros generado para obtener negativos a traves del balance"

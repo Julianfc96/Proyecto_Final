@@ -1,0 +1,32 @@
+version: 2
+
+snapshots:
+  - name: loan_snapshot
+    description: "Este snapshot captura el estado de los préstamos de la tabla `loan` en el esquema `financiera`."
+    columns:
+      - name: loan_id
+        description: "El identificador único del préstamo."
+      - name: account_id
+        description: "El identificador de la cuenta asociada con el préstamo."
+      - name: loan_create_at
+        description: "La fecha de creación del préstamo en formato YYYY-MM-DD."
+      - name: amount_eur
+        description: "El monto del préstamo convertido a euros, redondeado a dos decimales."
+      - name: duration
+        description: "La duración del préstamo en meses."
+      - name: payments_eur
+        description: "El monto de los pagos del préstamo convertido a euros, redondeado a dos decimales."
+      - name: status_id
+        description: "El identificador del estado del préstamo generado como una clave sustituta."
+      - name: status
+        description: |
+          "El estado del préstamo, con las siguientes posibles interpretaciones:
+          - 'A': Contrato terminado, sin problemas.
+          - 'B': Contrato terminado, préstamo no pagado.
+          - 'C': Contrato en ejecución, pagos correctos.
+          - 'D': Contrato en ejecución, cliente endeudado."
+      - name: data_deleted
+        description: "Indica si el registro ha sido eliminado."
+      - name: date_load
+        description: "La fecha y hora en que se sincronizó el registro por última vez."
+

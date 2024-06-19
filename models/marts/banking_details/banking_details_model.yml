@@ -28,3 +28,21 @@ models:
         description: "Saldo actual"
         tests:
           - not_null
+      - name: card_id
+        description: "Identificador máximo de la tarjeta asociada"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__card')
+              field: card_id
+      - name: client_id
+        description: "Identificador máximo del cliente asociado"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__client_disp')
+              field: client_id
+      - name: district_id
+        description: "Identificador del distrito asociado"
+        tests:
+          - relationships:
+              to: ref('dim_financiera__district')
+              field: district_id

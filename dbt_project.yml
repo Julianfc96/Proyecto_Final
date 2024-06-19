@@ -1,8 +1,7 @@
-
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'curso'
+name: 'Proyecto_Final'
 version: '1.0.0'
 config-version: 2
 
@@ -33,21 +32,33 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 models:
   +transient: false
-  curso:
+  Proyecto_Final:
     # Applies to all files under models/example/
 
     staging:
       +materialized: view
       +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+      +docs:
+        node_color: "#616160"
       financiera:
-        +schema: financiera
+          +schema: financiera
+          tags: ['staging']
 
+    intermediate:
+      +materialized: incremental
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+      +docs:
+        node_color: "#aa6c39"
+      tags: ['intermediate']
       
     marts:
-      +materialized: table
+      +materialized: incremental
       +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD_DB"
+      +docs:
+        node_color: "#934FDB"
       core:
         +schema: core
+        tags: ['marts']
 
 seeds:
   +schema: seed_data
@@ -56,3 +67,6 @@ snapshots:
   +transient: false
   +target_database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
   +target_schema: snapshots
+  +docs:
+    node_color: "brown"
+  tags: ['snapshots']
